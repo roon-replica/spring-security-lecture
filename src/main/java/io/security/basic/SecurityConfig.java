@@ -54,6 +54,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .maximumSessions(1)
                 .maxSessionsPreventsLogin(false); // true -> prevent , false(default) -> expire previous session
 
+        http.sessionManagement()
+                .sessionFixation().changeSessionId();   //default
+//                .sessionFixation().none();      // none으로 설정하면 session fixation protection 없어서 따로 보호 제공해야 함
+
 
     }
 }

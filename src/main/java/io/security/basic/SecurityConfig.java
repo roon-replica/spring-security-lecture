@@ -6,6 +6,11 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
@@ -16,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.ArrayList;
 
 @EnableWebSecurity
 @Configuration
@@ -66,6 +72,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 })
                 .deleteCookies("remember-me");
 
+        http.rememberMe()
+                .rememberMeParameter("remember")    // default : remember-me
+                .tokenValiditySeconds(30)   // set 30 seconds for test
+                .userDetailsService(new UserDetailsService() {  //test용이라 익명 클래스로 작성
+                    @Override
+                    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+                        return new User("leemr","1234",new ArrayList<GrantedAuthority>());
+                    }
+                });
 
     }
 }

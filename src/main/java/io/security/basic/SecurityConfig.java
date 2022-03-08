@@ -38,49 +38,31 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .usernameParameter("custom_username_input_name")
                 .passwordParameter("custom_password_input_name")
                 .loginProcessingUrl("/loginProcess")
-                .successHandler(new AuthenticationSuccessHandler() {
-                    @Override
-                    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-                        System.out.println("authenticate success : " + authentication.getName());
-                        response.sendRedirect("/");
-                    }
+                .successHandler((request, response, authentication) -> {
+                    System.out.println("authenticate success : " + authentication.getName());
+                    response.sendRedirect("/");
                 })
-                .failureHandler(new AuthenticationFailureHandler() {
-                    @Override
-                    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
-                        System.out.println("authenticate failed :" + exception.getMessage());
-                        response.sendRedirect("/loginPage");
-                    }
+                .failureHandler((request, response, exception) -> {
+                    System.out.println("authenticate failed :" + exception.getMessage());
+                    response.sendRedirect("/loginPage");
                 })
                 .permitAll();
 
         http.logout()
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/login")
-                .addLogoutHandler(new LogoutHandler() {
-                    @Override
-                    public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
-                        HttpSession session = request.getSession();
-                        session.invalidate();
-                    }
+                .addLogoutHandler((request, response, authentication) -> {
+                    HttpSession session = request.getSession();
+                    session.invalidate();
                 })
-                .logoutSuccessHandler(new LogoutSuccessHandler() {
-                    @Override
-                    public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-                        response.sendRedirect("/login");
-                    }
-                })
+                .logoutSuccessHandler((request, response, authentication) -> response.sendRedirect("/login"))
                 .deleteCookies("remember-me");
 
+        //test용이라 익명 클래스로 작성
         http.rememberMe()
                 .rememberMeParameter("remember")    // default : remember-me
                 .tokenValiditySeconds(30)   // set 30 seconds for test
-                .userDetailsService(new UserDetailsService() {  //test용이라 익명 클래스로 작성
-                    @Override
-                    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-                        return new User("leemr","1234",new ArrayList<GrantedAuthority>());
-                    }
-                });
+                .userDetailsService(username -> new User("leemr", "1234", new ArrayList<GrantedAuthority>()));
 
     }
 }

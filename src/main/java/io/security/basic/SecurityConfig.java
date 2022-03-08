@@ -1,12 +1,21 @@
 package io.security.basic;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.session.SessionAuthenticationException;
+import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 
@@ -15,8 +24,8 @@ import java.util.ArrayList;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .anyRequest().authenticated();
+//        http.authorizeRequests()
+//                .anyRequest().authenticated();
 
         http.formLogin()
 //                .loginPage("/loginPage")
@@ -58,6 +67,28 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionFixation().changeSessionId();   //default
 //                .sessionFixation().none();      // none으로 설정하면 session fixation protection 없어서 따로 보호 제공해야 함
 
+        http.authorizeRequests()
+                .antMatchers("/user").hasRole("USER")
+                .antMatchers("/admin/pay").hasRole("ADMIN")
+                .antMatchers("/admin/**").access("hasRole('ADMIN') or hasRole('SYS')")
+                .anyRequest().authenticated();
 
+    }
+
+    @Bean
+    PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.inMemoryAuthentication()
+                .withUser("user").password(passwordEncoder().encode("1234")).roles("USER");
+
+        auth.inMemoryAuthentication()
+                .withUser("sys").password(passwordEncoder().encode("1234")).roles("SYS", "USER");
+
+        auth.inMemoryAuthentication()
+                .withUser("admin").password(passwordEncoder().encode("1234")).roles("ADMIN", "SYS", "USER");
     }
 }

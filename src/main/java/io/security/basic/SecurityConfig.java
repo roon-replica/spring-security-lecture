@@ -50,5 +50,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .tokenValiditySeconds(30)   // set 30 seconds for test
                 .userDetailsService(username -> new User("leemr", "1234", new ArrayList<GrantedAuthority>()));
 
+        http.sessionManagement()
+                .maximumSessions(1)
+                .maxSessionsPreventsLogin(false); // true -> prevent , false(default) -> expire previous session
+
+
     }
 }

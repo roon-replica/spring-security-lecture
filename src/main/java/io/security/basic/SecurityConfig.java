@@ -34,8 +34,8 @@ import java.util.ArrayList;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-//        http.authorizeRequests()
-//                .anyRequest().authenticated();
+
+        http.authorizeRequests().antMatchers("/").permitAll();
 
         http.formLogin()
 //                .loginPage("/loginPage")
@@ -52,7 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     @Override
                     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
                         RequestCache requestCache = new HttpSessionRequestCache();
-                        SavedRequest savedRequest = requestCache.getRequest(request,response);
+                        SavedRequest savedRequest = requestCache.getRequest(request, response);
                         String redirectUrl = savedRequest.getRedirectUrl();
                         response.sendRedirect(redirectUrl);
                     }
@@ -106,6 +106,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     }
                 });
 
+//        http.csrf().disable();
     }
 
     @Bean

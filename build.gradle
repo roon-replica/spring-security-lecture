@@ -25,6 +25,9 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
     implementation 'org.springframework.boot:spring-boot-starter-security'
+
+    implementation group: 'org.thymeleaf', name: 'thymeleaf', version: '3.0.14.RELEASE'
+
 }
 
 tasks.named('test') {

@@ -16,4 +16,4 @@
  ExceptionTranslationFilter
 
 ### spring security filter chain
-![](src/main/resources/static/filter-chain.png)
+![](../src/main/resources/static/filter-chain.png)

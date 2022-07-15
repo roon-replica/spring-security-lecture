@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <title>로그인 페이지 </title>
+    <div th:replace="/fragments/header.html :: header-fragment">...</div>
+
+</head>
+<body>
+
+<!--<div th:if="${param.error}">-->
+<!--    Invalid username and password.-->
+<!--</div>-->
+<!--<div th:if="${param.logout}">-->
+<!--    You have been logged out.-->
+</div>
+
+<form th:action="@{/processLogin}" method="post">
+<!--<form id="loginForm" >-->
+    <div><label> User Name : <input type="text" id="username" name="username"/> </label></div>
+    <div><label> Password: <input type="password" id="password" name="password"/> </label></div>
+    <div><input type="submit" id="submitButton" value="Sign In"/></div>
+</form>
+
+
+<!--&lt;!&ndash;<script>&ndash;&gt;-->
+<!--<script th:inline="javascript">-->
+<!--    // const loginForm = $("#loginForm");-->
+<!--    const submitButton = $("#submitButton");-->
+
+<!--    submitButton.on("click", async function (e) {-->
+<!--        e.preventDefault();-->
+
+<!--        const formdata = {-->
+<!--            username: $('#username').val(),-->
+<!--            password: $('#password').val()-->
+<!--        };-->
+
+<!--        const res = await fetch(`/processLogin?username=${formdata.username}&password=${formdata.password}`-->
+<!--            , {method: 'POST'}-->
+<!--        )-->
+<!--            .then(response => {-->
+<!--                alert(response.json());-->
+<!--                // window.location.href = '/';-->
+<!--            });-->
+<!--    });-->
+
+<!--</script>-->
+
+</body>
+</html>

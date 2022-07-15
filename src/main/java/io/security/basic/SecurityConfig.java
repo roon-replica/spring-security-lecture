@@ -35,33 +35,37 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        http.authorizeRequests().antMatchers("/").permitAll();
+        http.authorizeRequests().antMatchers("/", "/login").permitAll();
 
         http.formLogin()
-//                .loginPage("/loginPage")
-                .defaultSuccessUrl("/")
-                .failureUrl("/loginPage")
-                .usernameParameter("custom_username_input_name")
-                .passwordParameter("custom_password_input_name")
-                .loginProcessingUrl("/loginProcess")
+                .loginPage("/login")
+                .defaultSuccessUrl("/success")
+//                .defaultSuccessUrl("/")
+                .failureUrl("/fail")
+//                .usernameParameter("custom_username_input_name")
+//                .passwordParameter("custom_password_input_name")
+                .loginProcessingUrl("/processLogin")
+                .permitAll();
+
 //                .successHandler((request, response, authentication) -> {
 //                    System.out.println("authenticate success : " + authentication.getName());
 //                    response.sendRedirect("/");
 //                })
-                .successHandler(new AuthenticationSuccessHandler() {
-                    @Override
-                    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-                        RequestCache requestCache = new HttpSessionRequestCache();
-                        SavedRequest savedRequest = requestCache.getRequest(request, response);
-                        String redirectUrl = savedRequest.getRedirectUrl();
-                        response.sendRedirect(redirectUrl);
-                    }
-                })
-                .failureHandler((request, response, exception) -> {
-                    System.out.println("authenticate failed :" + exception.getMessage());
-                    response.sendRedirect("/loginPage");
-                })
-                .permitAll();
+
+//                .successHandler(new AuthenticationSuccessHandler() {
+//                    @Override
+//                    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+//                        RequestCache requestCache = new HttpSessionRequestCache();
+//                        SavedRequest savedRequest = requestCache.getRequest(request, response);
+//                        String redirectUrl = savedRequest.getRedirectUrl();
+//                        response.sendRedirect(redirectUrl);
+//                    }
+//                })
+//                .failureHandler((request, response, exception) -> {
+//                    System.out.println("authenticate failed :" + exception.getMessage());
+//                    response.sendRedirect("/login");
+//                })
+//                .permitAll();
 
         http.logout()
                 .logoutUrl("/logout")
@@ -73,18 +77,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutSuccessHandler((request, response, authentication) -> response.sendRedirect("/login"))
                 .deleteCookies("remember-me");
 
-        http.rememberMe()
-                .rememberMeParameter("remember")    // default : remember-me
-                .tokenValiditySeconds(30)   // set 30 seconds for test
-                .userDetailsService(username -> new User("leemr", "1234", new ArrayList<GrantedAuthority>()));
+//        http.rememberMe()
+//                .rememberMeParameter("remember")    // default : remember-me
+//                .tokenValiditySeconds(30)   // set 30 seconds for test
+//                .userDetailsService(username -> new User("leemr", "1234", new ArrayList<GrantedAuthority>()));
 
-        http.sessionManagement()
-                .maximumSessions(1)
-                .maxSessionsPreventsLogin(false); // true -> prevent , false(default) -> expire previous session
-
-        http.sessionManagement()
-                .sessionFixation().changeSessionId();   //default
-//                .sessionFixation().none();      // none으로 설정하면 session fixation protection 없어서 따로 보호 제공해야 함
+//        http.sessionManagement()
+//                .maximumSessions(1)
+//                .maxSessionsPreventsLogin(false); // true -> prevent , false(default) -> expire previous session
+//
+//        http.sessionManagement()
+//                .sessionFixation().changeSessionId();   //default
+////                .sessionFixation().none();      // none으로 설정하면 session fixation protection 없어서 따로 보호 제공해야 함
 
         http.authorizeRequests()
                 .antMatchers("/user").hasRole("USER")
@@ -106,7 +110,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     }
                 });
 
-//        http.csrf().disable();
+        http.csrf().disable();
+
     }
 
     @Bean

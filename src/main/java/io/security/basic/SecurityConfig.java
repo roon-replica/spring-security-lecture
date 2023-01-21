@@ -31,15 +31,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests().antMatchers("/", "/login").permitAll();
 
-        http.formLogin()
-                .loginPage("/login")
-                .defaultSuccessUrl("/success")
-//                .defaultSuccessUrl("/")
-                .failureUrl("/fail")
-//                .usernameParameter("custom_username_input_name")
-//                .passwordParameter("custom_password_input_name")
-                .loginProcessingUrl("/processLogin")
-                .permitAll();
+//        http.formLogin()
+//                .loginPage("/login")
+//                .defaultSuccessUrl("/success")
+////                .defaultSuccessUrl("/")
+//                .failureUrl("/fail")
+////                .usernameParameter("custom_username_input_name")
+////                .passwordParameter("custom_password_input_name")
+//                .loginProcessingUrl("/processLogin")
+//                .permitAll();
 
 //                .successHandler((request, response, authentication) -> {
 //                    System.out.println("authenticate success : " + authentication.getName());
@@ -84,11 +84,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                .sessionFixation().changeSessionId();   //default
 ////                .sessionFixation().none();      // none으로 설정하면 session fixation protection 없어서 따로 보호 제공해야 함
 
-        http.authorizeRequests()
-                .antMatchers("/user").hasRole("USER")
-                .antMatchers("/admin/pay").hasRole("ADMIN")
-                .antMatchers("/admin/**").access("hasRole('ADMIN') or hasRole('SYS')")
-                .anyRequest().authenticated();
+//        http.authorizeRequests()
+//                .antMatchers("/user").hasRole("USER")
+//                .antMatchers("/admin/pay").hasRole("ADMIN")
+//                .antMatchers("/admin/**").access("hasRole('ADMIN') or hasRole('SYS')")
+//                .anyRequest().authenticated();
 
         http.exceptionHandling()
                 .authenticationEntryPoint(new AuthenticationEntryPoint() {  // 인증 실패 시
@@ -108,20 +108,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     }
 
-    @Bean
-    PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+//    @Bean
+//    PasswordEncoder passwordEncoder() {
+//        return new BCryptPasswordEncoder();
+//    }
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication()
-                .withUser("user").password(passwordEncoder().encode("1234")).roles("USER");
-
-        auth.inMemoryAuthentication()
-                .withUser("sys").password(passwordEncoder().encode("1234")).roles("SYS", "USER");
-
-        auth.inMemoryAuthentication()
-                .withUser("admin").password(passwordEncoder().encode("1234")).roles("ADMIN", "SYS", "USER");
-    }
+//    @Override
+//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+//        auth.inMemoryAuthentication()
+//                .withUser("user").password(passwordEncoder().encode("1234")).roles("USER");
+//
+//        auth.inMemoryAuthentication()
+//                .withUser("sys").password(passwordEncoder().encode("1234")).roles("SYS", "USER");
+//
+//        auth.inMemoryAuthentication()
+//                .withUser("admin").password(passwordEncoder().encode("1234")).roles("ADMIN", "SYS", "USER");
+//    }
 }

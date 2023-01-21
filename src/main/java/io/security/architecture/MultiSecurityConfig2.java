@@ -5,7 +5,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
-@Order(0)
+@Order(10)
 @Configuration
 public class MultiSecurityConfig2 extends WebSecurityConfigurerAdapter {
     @Override

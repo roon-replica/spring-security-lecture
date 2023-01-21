@@ -33,4 +33,9 @@ public class SecurityController {
     public String success(){
         return "success";
     }
+
+    @GetMapping("/admin")
+    public String adminTest(){
+        return "success";
+    }
 }

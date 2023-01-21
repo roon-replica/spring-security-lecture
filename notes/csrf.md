@@ -3,7 +3,7 @@
 - CsrfFilter, csrf token을 이용해 csrf 취약점 대응
 
 - CsrfFilter 주요 로직
-![img.png](img.png)
+![csrf.png](../src/main/resources/static/csrf.png)
   
 
 - thymeleaf는 POST 요청할 때 csrf 토큰을 생성해준다고함

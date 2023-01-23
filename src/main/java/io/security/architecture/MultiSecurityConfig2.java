@@ -12,8 +12,13 @@ public class MultiSecurityConfig2 extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
+                .antMatchers("/user").hasRole("USER");
+
+        http
+                .authorizeRequests()
                 .anyRequest().permitAll()
                 .and()
                 .formLogin();
+
     }
 }

@@ -45,4 +45,8 @@ public class SecurityController {
         return "thread";
     }
 
+    @GetMapping("/user")
+    public String user() {
+        return "user";
+    }
 }

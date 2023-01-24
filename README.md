@@ -19,3 +19,7 @@ spring security 잘 모르는 듯
 ### 일정 계획
 
 ![](src/main/resources/static/계획.png)
+
+
+### 참고
+https://github.com/onjsdnjs/corespringsecurity
